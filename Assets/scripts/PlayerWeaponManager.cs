@@ -9,16 +9,32 @@ public class PlayerWeaponManager : MonoBehaviour
     public Transform firePoint; // Точка появления пули
     public GameObject projectilePrefab; // Префаб пули
     Animator animator;
-
+    private UIHintManager ui;
     void Start()
     {
         animator = GetComponent<Animator>();
+        ui = FindObjectOfType<UIHintManager>();
     }
 
     public void Update()
     {
         WeaponManager();
         HandleShooting();
+        HandleWeaponHints();
+    }
+
+    void HandleWeaponHints()
+    {
+        //if (curWeaponType != "Null")
+        //{
+        //    // Если оружие в руках, показываем подсказки для стрельбы и сброса
+        //    ui?.ShowHint("Press LMB to shoot\nPress RMB to drop item");
+        //}
+        //else
+        //{
+        //    // Если оружия нет, скрываем подсказки
+        //    ui?.ShowHint("Press RMB to pick up item");
+        //}
     }
 
     void WeaponManager()
@@ -58,7 +74,11 @@ public class PlayerWeaponManager : MonoBehaviour
             Vector3 newpose = new Vector3(transform.position.x, transform.position.y, 0);
             Instantiate(Resources.Load("Prefabs/Items/" + weapon), newpose, Quaternion.identity);
             if (!inTrigger)
+            {
                 curWeaponType = "Null";
+                // Скрываем подсказки при сбросе оружия
+                ui?.HideHint();
+            }
         }
         else
         {
@@ -69,10 +89,15 @@ public class PlayerWeaponManager : MonoBehaviour
     public void setcurweapon(string weapon)
     {
         curWeaponType = weapon;
+        if (ui != null)
+        {
+            ui.ShowHint("Press LMB to shoot or Press RMB to drop item");
+        }
     }
 
     public void playAnimwhenWeaponishold()
     {
+        
         animator.SetBool("isarmedanim", true);
         animator.CrossFade("armed", 0.2f, 0);
     }
