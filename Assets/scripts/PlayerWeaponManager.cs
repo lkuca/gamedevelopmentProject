@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class PlayerWeaponManager : MonoBehaviour
 {
+    private PauseMenuManager pausemenu;
     public string curWeaponType;
     public bool inTrigger = false;
     public Transform firePoint; // Точка появления пули
+    public Transform shell;
     public GameObject projectilePrefab; // Префаб пули
+    public GameObject shelly;
     Animator animator;
     private UIHintManager ui;
     void Start()
@@ -18,9 +21,14 @@ public class PlayerWeaponManager : MonoBehaviour
 
     public void Update()
     {
+        if (PauseMenuManager.IsGamePaused)
+            return;
+
         WeaponManager();
         HandleShooting();
         HandleWeaponHints();
+
+
     }
 
     void HandleWeaponHints()
@@ -52,6 +60,7 @@ public class PlayerWeaponManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && curWeaponType != "Null")
         {
             Shoot();
+            ammo();
         }
     }
 
@@ -60,6 +69,17 @@ public class PlayerWeaponManager : MonoBehaviour
         if (projectilePrefab != null && firePoint != null)
         {
             Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+        }
+        else
+        {
+            Debug.LogWarning("Projectile Prefab или FirePoint не установлены!");
+        }
+    }
+    void ammo()
+    {
+        if (shelly != null && shell != null)
+        {
+            Instantiate(shelly, shell.position, shell.rotation);
         }
         else
         {

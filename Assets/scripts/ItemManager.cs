@@ -8,7 +8,7 @@ public class ItemManager : MonoBehaviour
 
     private PlayerWeaponManager pw;
     private bool isPlayerInTrigger = false;
-
+    private PauseMenuManager pausemenu;
     private SpriteRenderer sr;
     private Color originalColor;
 
@@ -41,6 +41,8 @@ public class ItemManager : MonoBehaviour
         {
             StartCoroutine(WaitAndPickup());
         }
+        if (PauseMenuManager.IsGamePaused)
+            return;
     }
 
     private void OnTriggerStay2D(Collider2D col)

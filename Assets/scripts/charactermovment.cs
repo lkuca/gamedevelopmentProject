@@ -9,7 +9,7 @@ public class charactermovment : MonoBehaviour
     Animator animator;
     float x;
     float y;
-
+    private PauseMenuManager pausedMenu;
     public bool canMove = true;
 
     Vector3 mousePosition;
@@ -29,6 +29,9 @@ public class charactermovment : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (PauseMenuManager.IsGamePaused)
+            return;
+
         InputManager();
     }
 
